@@ -6,14 +6,13 @@
  * Date: 18-11-29
  * Time: 下午2:43
  */
-
+declare(strict_types = 1);//根据项目的版本自行添加.
 testAction();
+
+echo RedisConnect::getRedis()->LPop('site:hm:errorLog');
 
 function testAction()
 {
-    //任务执行开始时间 必须按此格式 2018-11-21T08:45:04.04Z
-    $data['start_time'] = str_replace('+00:00', 'Z', gmdate('c'));
-
     $data = [
         'channel_code' => 'Offical Site',
         'store_code'   => 'HM-CN-Store',
@@ -21,8 +20,8 @@ function testAction()
         'module'       => 'Index',
         'controller'   => 'Index',
         'action'       => 'test',
-        'order_no'     => '12345678'
-
+        'order_no'     => '12345678',
+        'start_time'   => str_replace('+00:00', 'Z', gmdate('c'))//任务执行开始时间
     ];
 
     //--------情况1:处理业务-------
@@ -137,7 +136,7 @@ class RedisConnect
         $application_env = getenv('APPLICATION_ENV') ? : 'Production';
         $config          = [
             'host'         => '192.168.0.73',
-            'port'         => '6379',
+            'port'         => 6379,
             'cache_time'   => 30,
             'cache_prefix' => '',
             'password'     => ''
@@ -146,7 +145,7 @@ class RedisConnect
         if ('Test' == $application_env) {
             $config = [
                 'host'         => 'localhost',
-                'port'         => '6379',
+                'port'         => 6379,
                 'cache_time'   => 30,
                 'cache_prefix' => '',
                 'password'     => true
@@ -163,12 +162,12 @@ class RedisConnect
         return self::$_RedisInstance ? : new self;
     }
 
-    public static function LPush($key, $value)
+    public static function LPush(string $key, $value)
     {
         self::$_RedisInstance->lPush($key, $value);
     }
 
-    public static function LPop($key)
+    public static function LPop(string $key)
     {
         self::$_RedisInstance->lPop($key);
     }
