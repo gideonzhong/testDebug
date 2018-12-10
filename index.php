@@ -9,8 +9,9 @@
 declare(strict_types = 1);//根据项目的版本自行添加.
 testAction();
 
-echo RedisConnect::getRedis()->LPop('site:hm:errorLog');
+//echo RedisConnect::getRedis()->LPop('site:hm:errorlog');
 
+echo 'done';
 function testAction()
 {
     $data = [
@@ -66,7 +67,7 @@ function testAction()
     //(必填）此字段用于运维告警时使用,跟上面的action是两个不同概念,必须全局统一，同一个action内可以有多个不相同的action_type
     $data['action_type'] = 'make_order_business_flow';
 
-    CommonLog::emergency($data, 'site:hm:errorLog');
+    CommonLog::emergency($data, 'site:hm:errorlog');
 
     //-------情况2:请求接口类-------
 
@@ -98,7 +99,7 @@ function testAction()
     //(必填）此字段用于运维告警时使用,跟上面的action是两个不同概念,必须全局统一，同一个action内可以有多个不相同的action_type
     $data['action_type'] = 'make_order_call_api';
 
-    CommonLog::emergency($data, 'site:hm:errorLog');
+    CommonLog::emergency($data, 'site:hm:errorlog');
 }
 
 class CommonLog
@@ -114,7 +115,7 @@ class CommonLog
      * @param array $data
      * @param string $list_key Depend on your project.The format is, platform_name:***
      */
-    public static function emergency(array $data, string $list_key = 'site:hm:errorLog')
+    public static function emergency(array $data, string $list_key = 'site:hm:errorlog')
     {
         $data['ip']          = $_SERVER['SERVER_ADDR'];//(必填）
         $data['hostname']    = gethostbyaddr($_SERVER['SERVER_ADDR']);
